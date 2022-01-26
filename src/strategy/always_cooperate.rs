@@ -1,4 +1,4 @@
-use std::sync::{Arc, Mutex};
+use std::{cell::RefCell, rc::Rc};
 
 use crate::{strategy::Strategy, Choice, History};
 
@@ -6,7 +6,7 @@ use crate::{strategy::Strategy, Choice, History};
 pub struct AlwaysCooperate;
 
 impl Strategy for AlwaysCooperate {
-    fn choose(&mut self, _history: Arc<Mutex<Vec<History>>>) -> Choice {
+    fn choose(&mut self, _history: Rc<RefCell<Vec<History>>>) -> Choice {
         Choice::Cooperate
     }
 

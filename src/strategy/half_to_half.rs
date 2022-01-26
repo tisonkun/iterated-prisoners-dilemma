@@ -1,4 +1,4 @@
-use std::sync::{Arc, Mutex};
+use std::{cell::RefCell, rc::Rc};
 
 use rand::{rngs::ThreadRng, Rng};
 
@@ -17,7 +17,7 @@ impl Default for HalfToHalf {
 }
 
 impl Strategy for HalfToHalf {
-    fn choose(&mut self, _history: Arc<Mutex<Vec<History>>>) -> Choice {
+    fn choose(&mut self, _history: Rc<RefCell<Vec<History>>>) -> Choice {
         match self.rng.gen_bool(0.5) {
             true => Choice::Cooperate,
             false => Choice::Betray,

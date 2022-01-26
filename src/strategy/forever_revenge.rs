@@ -1,4 +1,4 @@
-use std::sync::{Arc, Mutex};
+use std::{cell::RefCell, rc::Rc};
 
 use crate::{strategy::Strategy, Choice, History};
 
@@ -13,8 +13,8 @@ impl ForeverRevenge {
 }
 
 impl Strategy for ForeverRevenge {
-    fn choose(&mut self, history: Arc<Mutex<Vec<History>>>) -> Choice {
-        let history = history.lock().unwrap();
+    fn choose(&mut self, history: Rc<RefCell<Vec<History>>>) -> Choice {
+        let history = history.borrow();
         let ever_betray = history
             .iter()
             .any(|h| h.opponent_id == self.id && h.choice == Choice::Betray);
