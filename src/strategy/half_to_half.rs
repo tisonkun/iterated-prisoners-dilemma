@@ -1,3 +1,5 @@
+use std::sync::{Arc, Mutex};
+
 use rand::{rngs::ThreadRng, Rng};
 
 use crate::{strategy::Strategy, Choice, History};
@@ -15,7 +17,7 @@ impl Default for HalfToHalf {
 }
 
 impl Strategy for HalfToHalf {
-    fn choose(&mut self, _history: Vec<History>) -> Choice {
+    fn choose(&mut self, _history: Arc<Mutex<Vec<History>>>) -> Choice {
         match self.rng.gen_bool(0.5) {
             true => Choice::Cooperate,
             false => Choice::Betray,

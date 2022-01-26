@@ -1,3 +1,5 @@
+use std::sync::{Arc, Mutex};
+
 use iterated_prisoners_dilemma::{
     strategy::{AlwaysBetray, AlwaysCooperate, ForeverRevenge, HalfToHalf, Strategy, TitForTat},
     Choice, History,
@@ -5,7 +7,7 @@ use iterated_prisoners_dilemma::{
 
 struct Player {
     strategy: Box<dyn Strategy>,
-    history: Vec<History>,
+    history: Arc<Mutex<Vec<History>>>,
     archived: Vec<History>,
     score: u64,
 }
@@ -14,25 +16,23 @@ impl Player {
     fn new(strategy: Box<dyn Strategy>) -> Self {
         Self {
             strategy,
-            history: vec![],
+            history: Arc::new(Mutex::new(Vec::new())),
             archived: vec![],
             score: 0,
         }
     }
 
-    pub fn choose(&mut self, history: Vec<History>) -> Choice {
+    pub fn choose(&mut self, history: Arc<Mutex<Vec<History>>>) -> Choice {
         self.strategy.choose(history)
     }
 
-    pub fn choice_history(&self) -> Vec<History> {
+    pub fn choice_history(&self) -> Arc<Mutex<Vec<History>>> {
         self.history.clone()
     }
 
     pub fn archive_history(&mut self) {
-        for history in &self.history {
-            self.archived.push(history.clone());
-        }
-        self.history.clear();
+        let mut histories = self.history.lock().unwrap();
+        self.archived.append(&mut *histories);
     }
 
     pub fn archived_history(&self) -> &Vec<History> {
@@ -40,7 +40,8 @@ impl Player {
     }
 
     pub fn push_history(&mut self, history: History) {
-        self.history.push(history)
+        let mut histories = self.history.lock().unwrap();
+        histories.push(history);
     }
 
     pub fn score(&self) -> u64 {
