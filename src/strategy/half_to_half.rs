@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: MIT
+
 use std::{cell::RefCell, rc::Rc};
 
 use rand::{rngs::ThreadRng, Rng};

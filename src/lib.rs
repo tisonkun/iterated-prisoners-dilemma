@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: MIT
+
 pub mod strategy;
 
 #[derive(Copy, Clone, Debug, PartialEq)]

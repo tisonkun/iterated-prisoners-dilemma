@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: MIT
+
 mod always_betray;
 mod always_cooperate;
 mod forever_revenge;
